@@ -1,11 +1,11 @@
 moveit_setup_assistant_config:
   URDF:
-    package: abb_irb6640_support
-    relative_path: urdf/irb6640_185_280.urdf
-    xacro_args: ""
+    package: abb_irb6660_support
+    relative_path: urdf/abb_irb6660.urdf
+    xacro_args: "--inorder "
   SRDF:
-    relative_path: config/abb_irb6640_185_280.srdf
+    relative_path: config/abb_irb6660_205_190.srdf
   CONFIG:
     author_name: Jan T. Olsen
-    author_email: janthomasolsen@gmail.com
-    generated_timestamp: 1619361690
+    author_email: jan.olsen@nov.com
+    generated_timestamp: 1619767419

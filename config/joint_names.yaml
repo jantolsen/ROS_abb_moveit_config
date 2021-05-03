@@ -1,4 +1,4 @@
-controller_joint_names:
+controller_joint_names: 
   - joint_1
   - joint_2
   - joint_3

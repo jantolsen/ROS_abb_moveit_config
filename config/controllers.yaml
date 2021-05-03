@@ -1,0 +1,249 @@
+# abb_robot:
+  
+  # Publish all joint states 
+  # -----------------------------------
+  joint_state_controller:
+    type: joint_state_controller/JointStateController
+    publish_rate: 50  
+
+  # Trajectory Controllers
+  # -----------------------------------   
+  PositionBased_PositionTrajectory_Controller:
+    type: position_controllers/JointTrajectoryController
+    joints:
+      - joint_1
+      - joint_2
+      - joint_3
+      - joint_4
+      - joint_5
+      - joint_6
+
+    constraints:
+                                                # trajectory: 
+      joint_1: {trajectory: 10.1, goal: 10.1}   # Position tolerance for a particular joint throughout the trajectory.           
+      joint_2: {trajectory: 10.1, goal: 10.1}   # If the joint position ever falls outside trajectory_position +/- tolerance, then the trajectory aborts
+      joint_3: {trajectory: 10.1, goal: 10.1}   # When the joint is within goal_position +/- goal_tolerance, than the trajectory can succeed.
+      joint_4: {trajectory: 10.1, goal: 10.1}   # goal:
+      joint_5: {trajectory: 10.1, goal: 10.1}   # Position tolerance for a particular joint to reach the goal.
+      joint_6: {trajectory: 10.1, goal: 10.1}   # When the joint is within goal_position +/- goal_tolerance, than the trajectory can succeed.                                         
+
+      stopped_velocity_tolerance: 0.05          # Velocity to be considered approximately equal to zero.    
+      goal_time: 0.6                            # If the timestamp of the goal trajectory point is t, 
+                                                # then following the trajectory succeeds if it reaches the goal within t +/- goal_time, and aborts otherwise.
+
+    state_publish_rate:  50                   # Frequency (in Hz) at which the controller state is published.
+    action_monitor_rate: 10                   # Frequency (in Hz) at which the action goal status is monitored.
+    stop_trajectory_duration: 0.5             # When starting the controller or canceling a trajectory, position hold mode is entered. 
+                                              # This parameter specifies the time it takes to bring the current state (position and velocity) to a stop. 
+                                              # Its value can be greater or equal than zero.
+
+  VelocityBased_PositionTrajectory_Controller:
+    type: velocity_controllers/JointTrajectoryController
+    joints:
+      - joint_1
+      - joint_2
+      - joint_3
+      - joint_4
+      - joint_5
+      - joint_6
+
+    gains: # Required because we're controlling a velocity interface
+      joint_1: {p: 100,  d: 10, i: 0.1, i_clamp: 1}
+      joint_2: {p: 100,  d: 10, i: 0.1, i_clamp: 1}
+      joint_3: {p: 100,  d: 10, i: 0.1, i_clamp: 1}
+      joint_4: {p: 100,  d: 10, i: 0.1, i_clamp: 1}
+      joint_5: {p: 100,  d: 10, i: 0.1, i_clamp: 1}
+      joint_6: {p: 100,  d: 10, i: 0.1, i_clamp: 1}
+
+    velocity_ff: # Velocity Feed-Forward gain (reduces the size of PID gains)
+      joint_1: 1.0
+      joint_2: 1.0
+      joint_3: 1.0
+      joint_4: 1.0
+      joint_5: 1.0
+      joint_6: 1.0
+
+    constraints:
+                                                # Trajectory: 
+      joint_1: {trajectory: 0.25, goal: 0.25}   # Position tolerance for a particular joint throughout the trajectory.           
+      joint_2: {trajectory: 0.25, goal: 0.25}   # If the joint position ever falls outside trajectory_position +/- tolerance, then the trajectory aborts
+      joint_3: {trajectory: 0.25, goal: 0.25}   # When the joint is within goal_position +/- goal_tolerance, than the trajectory can succeed.
+      joint_4: {trajectory: 0.25, goal: 0.25}   # Goal:
+      joint_5: {trajectory: 0.25, goal: 0.25}   # Position tolerance for a particular joint to reach the goal.
+      joint_6: {trajectory: 0.25, goal: 0.25}   # When the joint is within goal_position +/- goal_tolerance, than the trajectory can succeed.                                         
+
+      stopped_velocity_tolerance: 0.05          # Velocity to be considered approximately equal to zero.    
+      goal_time: 0.6                            # If the timestamp of the goal trajectory point is t, 
+                                                # then following the trajectory succeeds if it reaches the goal within t +/- goal_time, and aborts otherwise.
+
+    state_publish_rate:  50                   # Frequency (in Hz) at which the controller state is published.
+    action_monitor_rate: 10                   # Frequency (in Hz) at which the action goal status is monitored.
+    stop_trajectory_duration: 0.5             # When starting the controller or canceling a trajectory, position hold mode is entered. 
+                                              # This parameter specifies the time it takes to bring the current state (position and velocity) to a stop. 
+                                              # Its value can be greater or equal than zero.
+
+  EffortBased_PositionTrajectory_Controller:
+    type: effort_controllers/JointTrajectoryController
+    joints:
+      - joint_1
+      - joint_2
+      - joint_3
+      - joint_4
+      - joint_5
+      - joint_6
+
+    gains: # Required because we're controlling a velocity interface
+      joint_1: {p: 100,  d: 10, i: 0.1, i_clamp: 1}
+      joint_2: {p: 100,  d: 10, i: 0.1, i_clamp: 1}
+      joint_3: {p: 100,  d: 10, i: 0.1, i_clamp: 1}
+      joint_4: {p: 100,  d: 10, i: 0.1, i_clamp: 1}
+      joint_5: {p: 100,  d: 10, i: 0.1, i_clamp: 1}
+      joint_6: {p: 100,  d: 10, i: 0.1, i_clamp: 1}
+
+    constraints:
+                                                # Trajectory: 
+      joint_1: {trajectory: 0.25, goal: 0.25}   # Position tolerance for a particular joint throughout the trajectory.           
+      joint_2: {trajectory: 0.25, goal: 0.25}   # If the joint position ever falls outside trajectory_position +/- tolerance, then the trajectory aborts
+      joint_3: {trajectory: 0.25, goal: 0.25}   # When the joint is within goal_position +/- goal_tolerance, than the trajectory can succeed.
+      joint_4: {trajectory: 0.25, goal: 0.25}   # Goal:
+      joint_5: {trajectory: 0.25, goal: 0.25}   # Position tolerance for a particular joint to reach the goal.
+      joint_6: {trajectory: 0.25, goal: 0.25}   # When the joint is within goal_position +/- goal_tolerance, than the trajectory can succeed.                                         
+
+      stopped_velocity_tolerance: 0.05          # Velocity to be considered approximately equal to zero.    
+      goal_time: 0.6                            # If the timestamp of the goal trajectory point is t, 
+                                                # then following the trajectory succeeds if it reaches the goal within t +/- goal_time, and aborts otherwise.
+
+    state_publish_rate:  50                   # Frequency (in Hz) at which the controller state is published.
+    action_monitor_rate: 10                   # Frequency (in Hz) at which the action goal status is monitored.
+    stop_trajectory_duration: 0.5             # When starting the controller or canceling a trajectory, position hold mode is entered. 
+                                              # This parameter specifies the time it takes to bring the current state (position and velocity) to a stop. 
+                                              # Its value can be greater or equal than zero.
+
+
+  # Position Based - Joint Position Controllers
+  # ----------------------------------- 
+  Joint1_PositionBased_Position_Controller:
+    type: position_controllers/JointPositionController
+    joint: joint_1
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+
+  Joint2_PositionBased_Position_Controller:
+    type: position_controllers/JointPositionController
+    joint: joint_2
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+
+  Joint3_PositionBased_Position_Controller:
+    type: position_controllers/JointPositionController
+    joint: joint_3
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+
+  Joint4_PositionBased_Position_Controller:
+    type: position_controllers/JointPositionController
+    joint: joint_4
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+
+  Joint5_PositionBased_Position_Controller:
+    type: position_controllers/JointPositionController
+    joint: joint_5
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+
+  Joint6_PositionBased_Position_Controller:
+    type: position_controllers/JointPositionController
+    joint: joint_6
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+
+  # Velocity Based - Joint Velocity Controllers
+  # ----------------------------------- 
+  Joint1_VelocityBased_VelocityController:
+    type: velocity_controllers/JointVelocityController
+    joint: joint_1
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+
+  Joint2_VelocityBased_VelocityController:
+    type: velocity_controllers/JointVelocityController
+    joint: joint_2
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+
+  Joint3_VelocityBased_VelocityController:
+    type: velocity_controllers/JointVelocityController
+    joint: joint_3
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+
+  Joint4_VelocityBased_VelocityController:
+    type: velocity_controllers/JointVelocityController
+    joint: joint_4
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+
+  Joint5_VelocityBased_VelocityController:
+    type: velocity_controllers/JointVelocityController
+    joint: joint_5
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+
+  Joint6_VelocityBased_VelocityController:
+    type: velocity_controllers/JointVelocityController
+    joint: joint_6
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+
+  # Velocity Based - Joint Position Controllers
+  # ----------------------------------- 
+  Joint1_VelocityBased_Position_Controller:
+    type: velocity_controllers/JointPositionController
+    joint: joint_1
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+
+  Joint2_VelocityBased_Position_Controller:
+    type: velocity_controllers/JointPositionController
+    joint: joint_2
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+
+  Joint3_VelocityBased_Position_Controller:
+    type: velocity_controllers/JointPositionController
+    joint: joint_3
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+
+  Joint4_VelocityBased_Position_Controller:
+    type: velocity_controllers/JointPositionController
+    joint: joint_4
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+
+  Joint5_VelocityBased_Position_Controller:
+    type: velocity_controllers/JointPositionController
+    joint: joint_5
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+    
+  Joint6_VelocityBased_Position_Controller:
+    type: velocity_controllers/JointPositionController
+    joint: joint_6
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+
+  # Effort Based - Joint Position Controllers
+  # ----------------------------------- 
+  Joint1_EffortBased_Position_Controller:
+    type: effort_controllers/JointPositionController
+    joint: joint_1
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+
+  Joint2_EffortBased_Position_Controller:
+    type: effort_controllers/JointPositionController
+    joint: joint_2
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+
+  Joint3_EffortBased_Position_Controller:
+    type: effort_controllers/JointPositionController
+    joint: joint_3
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+
+  Joint4_EffortBased_Position_Controller:
+    type: effort_controllers/JointPositionController
+    joint: joint_4
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+
+  Joint5_EffortBased_Position_Controller:
+    type: effort_controllers/JointPositionController
+    joint: joint_5
+    pid: {p: 100.0, i: 0.01, d: 10.0}
+    
+  Joint6_EffortBased_Position_Controller:
+    type: effort_controllers/JointPositionController
+    joint: joint_6
+    pid: {p: 100.0, i: 0.01, d: 10.0}

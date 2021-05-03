@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+<launch>
+  
+    <!-- Gazebo Arguments -->
+    <arg name="paused" default="false"/>
+    <arg name="use_sim_time" default="true"/>
+    <arg name="gui" default="false"/>
+    <arg name="headless" default="false"/>
+    <arg name="debug" default="false"/>
+    <arg name="urdf_path" default="$(find abb_robot)/urdf/abb_irb6660.urdf"/>
+
+    <!-- startup simulated world -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" default="worlds/empty.world"/>
+    <arg name="debug" value="$(arg debug)" />
+    <arg name="gui" value="$(arg gui)" />
+    <arg name="paused" value="$(arg paused)"/>
+    <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+    <arg name="headless" value="$(arg headless)"/>
+    </include>
+
+    <!-- send robot urdf to param server -->
+    <param name="robot_description" textfile="$(arg urdf_path)" />
+
+    <!-- push robot_description to factory and spawn robot in gazebo at the origin, change x,y,z arguments to spawn in a different position -->
+    <node name="spawn_gazebo_model" pkg="gazebo_ros" type="spawn_model" 
+    respawn="false" output="screen" 
+    args="-urdf -param robot_description -model robot -x 0.0 -y 0.0 -z 0.0
+            -J joint_1 0.0 -J joint_2 0.0 -J joint_3 0.0 -J joint_4 0.0 -J joint_5 0.0 -J joint_6 0.0 "/>
+
+    <!-- Robot state publisher -->
+    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+    <param name="publish_frequency" type="double" value="50.0" />
+    <param name="tf_prefix" type="string" value="" />
+    </node>
+
+    <!-- joint_state_controller -->
+
+        <!-- Load joint controller configurations from YAML file to parameter server -->
+        <rosparam file="$(find abb_robot)/config/controllers.yaml" command="load"/>
+        
+        <!-- Load the controller(s) -->
+        <node name="joint_state_controller_spawner" pkg="controller_manager" type="controller_manager" 
+            respawn="false" output="screen"
+            args="spawn joint_state_controller" />
+  
+    <!-- system_controllers -->
+
+        <!-- Load joint controller configurations from YAML file to parameter server -->
+        <!-- <rosparam file="$(find abb_robot)/config/controllers.yaml" command="load"/> -->
+
+  
+        <!-- Load the controller(s) -->
+        <!-- <node name="controller_spawner_pos" pkg="controller_manager" type="spawner" 
+                    respawn="false" output="screen"
+                    args= "PositionBased_PositionTrajectory_Controller"/> -->
+
+        <!-- <node name="controller_spawner_vel" pkg="controller_manager" type="spawner" 
+                    respawn="false" output="screen"
+                    args= "Joint1_PositionBased_Position_Controller
+                           Joint2_PositionBased_Position_Controller
+                           Joint3_PositionBased_Position_Controller
+                           Joint4_PositionBased_Position_Controller
+                           Joint5_PositionBased_Position_Controller
+                           Joint6_PositionBased_Position_Controller"/> -->
+
+        <node name="controller_spawner_vel" pkg="controller_manager" type="spawner" 
+                    respawn="false" output="screen"
+                    args= "Joint1_VelocityBased_VelocityController
+                           Joint2_VelocityBased_VelocityController
+                           Joint3_VelocityBased_VelocityController
+                           Joint4_VelocityBased_VelocityController
+                           Joint5_VelocityBased_VelocityController
+                           Joint6_VelocityBased_VelocityController"/>
+
+        <!-- <node name="controller_spawner_vel" pkg="controller_manager" type="spawner" 
+                    respawn="false" output="screen"
+                    args= "VelocityBased_PositionTrajectory_Controller"/> -->
+
+        <!-- <node name="controller_spawner_vel" pkg="controller_manager" type="spawner" 
+                    respawn="false" output="screen"
+                    args= "Joint1_VelocityBased_Position_Controller
+                           Joint2_VelocityBased_Position_Controller
+                           Joint3_VelocityBased_Position_Controller
+                           Joint4_VelocityBased_Position_Controller
+                           Joint5_VelocityBased_Position_Controller
+                           Joint6_VelocityBased_Position_Controller"/> -->
+
+        <!-- <node name="controller_spawner_force" pkg="controller_manager" type="spawner" 
+                        respawn="false" output="screen"
+                        args= "EffortBased_PositionTrajectory_Controller"/> -->
+
+
+        <!-- <node name="controller_spawner_force" pkg="controller_manager" type="spawner" 
+                        respawn="false" output="screen"
+                        args= "Joint1_EffortBased_Position_Controller
+                               Joint2_EffortBased_Position_Controller
+                               Joint3_EffortBased_Position_Controller
+                               Joint4_EffortBased_Position_Controller
+                               Joint5_EffortBased_Position_Controller
+                               Joint6_EffortBased_Position_Controller"/> -->
+                               
+</launch> 

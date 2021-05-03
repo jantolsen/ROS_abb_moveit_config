@@ -10,6 +10,3 @@ controller_list:
   - name: fake_endeffector_controller
     joints:
       []
-initial:  # Define initial robot poses.
-  - group: manipulator
-    pose: pose_Home
